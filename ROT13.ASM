@@ -7,7 +7,7 @@ ret
 ;   STR_PTR
 ;OUTPUT
 ;   AX
-ROT13:                     ;пролог
+ROT13:
         push  bp
         mov   bp, sp
         push  bx
@@ -18,14 +18,14 @@ ROT13:                     ;пролог
         mov   si, [bp + 4]
         ;rot13
 .lp1:
-        cmp   byte[si], 0  ;преждевременный ноль
+        cmp   byte[si], 0
         jz    .no
-        movzx ax, byte[si] ;загружаем символ
-        sub   al, $30      ;преобразуем в диапазон от 0 до 9
+        movzx ax, byte[si]
+        sub   al, $30
         add   al, 13
         mov   bl, 10
-        div   bl           ;ROT13
-        test  cx, 1        ;четная нечетная позиция
+        div   bl
+        test  cx, 1
         jz    .even
         add   [odd], ah
         jmp   .continue
@@ -35,22 +35,22 @@ ROT13:                     ;пролог
         inc   si
         loop  .lp1
         cmp   byte[si], 0
-        jnz   .no         ;если нуля на конце нет
+        jnz   .no
 
         mov   al, [odd]
         mov   bl, 3
-        mul   bl          ;ответ в AX
+        mul   bl
         add   al, [even]
-        adc   ah, 0       ;учет переноса
+        adc   ah, 0
         xor   dx, dx
-        mov   bx, 10      ;DX:AX
+        mov   bx, 10
         div   bx
 
-        mov   ax, 1       ;тип да
+        mov   ax, 1
         cmp   dx, 0
         jz    .end
 .no:
-        mov   ax, 0       ;нет
+        mov   ax, 0
 .end:
         pop si
         pop dx
@@ -58,6 +58,6 @@ ROT13:                     ;пролог
         pop bp
 ret
 
-odd       db 0    ;нечетные
-even      db 0    ;четные
+odd       db 0
+even      db 0
 c_str     db '1432543255534',0
